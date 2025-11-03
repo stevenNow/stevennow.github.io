@@ -21,7 +21,8 @@
         font-family: "Inter", sans-serif;
       }
       /* Ensure links/buttons have clear focus states for accessibility */
-      a:focus, button:focus {
+      a:focus,
+      button:focus {
         outline: 3px solid var(--primary-color);
         outline-offset: 2px;
         border-radius: 0.5rem; /* Apply to rounded elements */
@@ -76,21 +77,26 @@
       </header>
 
       <!-- HOME VIEW (Visible when currentPage is 'home') -->
-      <main v-if="currentPage === 'home'" class="page-transition grid grid-cols-1 lg:grid-cols-3 gap-10">
+      <main
+        v-if="currentPage === 'home'"
+        class="page-transition grid grid-cols-1 lg:grid-cols-3 gap-10"
+      >
         <!-- Sidebar (Left Column on Desktop) -->
         <div class="lg:col-span-1 space-y-10">
-          
           <!-- About Me Section -->
-          <section class="p-6 bg-white rounded-xl shadow-lg border border-gray-200">
-            <h2 class="text-3xl font-bold mb-4 border-b pb-2 border-gray-300">About Me</h2>
+          <section
+            class="p-6 bg-white rounded-xl shadow-lg border border-gray-200"
+          >
+            <h2 class="text-3xl font-bold mb-4 border-b pb-2 border-gray-300">
+              About Me
+            </h2>
 
             <div class="flex justify-center mb-6">
               <!-- Placeholder Image Replacement -->
-              <img 
-                src="me.jfif" 
-               
+              <img
+                src="me.jfif"
                 class="w-32 h-32 object-cover rounded-full ring-4 ring-blue-500 shadow-xl"
-              >
+              />
             </div>
             <p class="text-gray-700 leading-relaxed">{{ portfolio.bio }}</p>
           </section>
@@ -262,11 +268,10 @@
           class="p-6 bg-white rounded-xl shadow-lg border border-gray-200"
         >
           <h2 class="text-4xl font-extrabold mb-6 text-gray-900">
-            All Featured Projects ({{ portfolio.projects.length }})
+            Examples of Work
           </h2>
           <p class="text-gray-600 mb-8 max-w-2xl">
-            A selection of key technical projects demonstrating full-stack
-            capabilities in design, architecture, and performance optimization.
+            Descriptions of projects I have worked on.
           </p>
 
           <!-- Projects Grid -->
@@ -295,6 +300,7 @@
               <!-- Project Links -->
               <div class="flex space-x-3 mt-4">
                 <a
+                  v-if="project.github"
                   :href="project.github"
                   target="_blank"
                   class="text-sm font-medium text-indigo-700 hover:text-indigo-500"
@@ -356,24 +362,21 @@
           },
           { cat: "Monitoring", name: "Splunk, New Relic, PagerDuty" },
           { cat: "Tools", name: "Git, Jira, Agile" },
-          { cat: "Bonus", name: "Experience Technical Writer" },
+          { cat: "AI", name: "Co-Pilot, Gemini, ChatGPT" },
+          { cat: "Bonus", name: "Experienced Technical Writer" },
         ],
         education: [
           {
             degree: "Master of Computer Science (M.C.S.)",
             institution: "University of Illinois at Urbana-Champaign",
             period: "2022 – 2025",
-            details: [
-              "GPA: 3.79/4.00",
-            ],
+            details: ["GPA: 3.79/4.00"],
           },
           {
             degree: "Bachelor of Science in Computer Science",
             institution: "Oregon State University",
             period: "2016 – 2019",
-            details: [
-              "GPA: 3.76/4.00",
-            ],
+            details: ["GPA: 3.76/4.00"],
           },
           {
             degree: "Bachelor of Arts in Rhetoric",
@@ -388,7 +391,7 @@
             company: "Capital One",
             period: "2022 – Present",
             details: [
-              "Principal Associate contributing to Card Fraud Tech Applications"
+              "Principal Associate contributing to Card Fraud Tech Applications",
             ],
           },
           {
@@ -411,55 +414,85 @@
             role: "Software Engineer",
             company: "Infogix",
             period: "2018-2020",
-            details: ["Develop features using JavaScript and Java for a Big Data Analytics and Visualization SaaS"]
+            details: [
+              "Develop features using JavaScript and Java for a Big Data Analytics and Visualization SaaS",
+            ],
           },
           {
             role: "Content Developer",
             company: "Infogix",
             period: "2014-2018",
-            details: ["Create all documentation for new business intelligence and data visualization SaaS product."]
+            details: [
+              "Create all documentation for new business intelligence and data visualization SaaS product.",
+            ],
           },
           {
             role: "Freelance Writer",
             company: "Self Employed",
             period: "2013-2014",
-            details: ["Started my own freelance writing business online, providing both technical and marketing writing to software companies."]
-          }
+            details: [
+              "Started my own freelance writing business online, providing both technical and marketing writing to software companies.",
+            ],
+          },
         ],
         projects: [
           {
-            name: "Scalable Task Manager API",
+            name: "Chaos Testing Capital One Application Containers",
             summary:
-              "Developed a high-throughput microservice architecture for task management, handling 10k+ requests per second.",
-            technologies: [
-              "Node.js",
-              "TypeScript",
-              "Express",
-              "MongoDB",
-              "AWS Lambda",
-            ],
-            github: "https://github.com/snowicki/task-manager-api",
-            live: "",
+              "Invented a technique to chaos test application containers by iterating through and breaking backend routes, running Playwright live dependency tests for each iteration, and collecting and displaying results.",
+            technologies: ["Node.js", "TypeScript", "Playwright"],
           },
           {
-            name: "Real-time Dashboard",
+            name: "COF Health Checker",
             summary:
-              "Created a responsive analytics dashboard using Vue.js and WebSockets for real-time data visualization.",
-            technologies: ["Vue 3", "Pinia", "Tailwind CSS", "WebSockets"],
-            github: "https://github.com/snowicki/realtime-dashboard",
-            live: "https://demo.realtime-dashboard.com",
+              "Created a reusable npm package that can be used by application containers to check API endpoint health during deployments.",
+            technologies: ["NodeJS"],
           },
           {
-            name: "E-commerce Checkout Module",
+            name: "Vue 3 Migrations",
             summary:
-              "Engineered a secure, performant checkout flow integrated with Stripe, resulting in a 15% reduction in cart abandonment.",
-            technologies: ["Vue 2", "Vuex", "SCSS", "Stripe API"],
-            github: "https://github.com/snowicki/ecommerce-checkout",
-            live: "https://demo.checkout-module.com",
+              "Migrated multiple production applications from Vue 2 to Vue 3.",
+            technologies: ["Vue.js"],
+          },
+          {
+            name: "Concern Status Microservice",
+            summary:
+              "Built an AWS Lambda microservice that increased efficiency by 3 seconds per call, improving overall system performance.",
+            technologies: ["AWS", "NodeJS"],
+          },
+          {
+            name: "Authentication UI Development",
+            summary: "Develop authentication UI components used to authenticate every customer who calls into Capital One customer support.",
+            technologies: ["Vue.js", "NodeJS"],
+          },
+          {
+            name: "Automated Concern Closure",
+            summary:
+              "Designed and implemented a solution that reduced daily production incidents from 1-2 to near-zero, saving 1 hour per day of manual intervention.",
+            technologies: ["Vue.js", "NodeJS"],
+          },
+          {
+            name: "Winner of the Summer 2024 Department Hackathon",
+            summary:
+              "Prototyped 'Check Engine' light, a web application to monitor application dependency health.",
+            technologies: ["React"],
+          },
+          {
+            name: "Winner of the Spring 2025 Department Hackathon",
+            summary:
+              "Prototyped I=E Monitoring Dashboard for customer enrollments.",
+            technologies: ["Snowflake"],
+          },
+          {
+            name: "Interactive Location Filter UI",
+            summary:
+              "Built an interactive UI filtering system for geographic locations, allowing users to filter from Country, State, County, City, with each filter subsequently filtering the next.",
+            technologies: ["Vue.js", "TypeScript"],
           },
           {
             name: "Movie Classifier",
-            summary: "A machine learning project using a neural network to classify movie genres based on plot summaries, achieving 90%+ accuracy.",
+            summary:
+              "A machine learning project using a neural network to classify movie genres based on plot summaries, achieving 90%+ accuracy.",
             technologies: ["Python", "TensorFlow", "Pandas", "scikit-learn"],
             github: "https://github.com/snowicki/movie-classifier-ml",
             live: "",
@@ -472,7 +505,7 @@
         setup() {
           const portfolio = ref(portfolioData);
           // New state variable to control the current view
-          const currentPage = ref('home'); 
+          const currentPage = ref("home");
 
           // Function to change the current view
           const navigateTo = (page) => {
