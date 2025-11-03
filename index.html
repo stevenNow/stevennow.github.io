@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Software Engineer Portfolio | Steven Nowicki</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Vue 3 from CDN -->
+    <script src="https://unpkg.com/vue@3"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Custom styles for smooth transitions and Inter font -->
+    <style>
+      :root {
+        --primary-color: #3b82f6; /* Blue 500 */
+      }
+      body {
+        font-family: "Inter", sans-serif;
+      }
+      /* Ensure links/buttons have clear focus states for accessibility */
+      a:focus, button:focus {
+        outline: 3px solid var(--primary-color);
+        outline-offset: 2px;
+        border-radius: 0.5rem; /* Apply to rounded elements */
+      }
+      .page-transition {
+        transition: opacity 0.3s ease-in-out;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100 text-gray-800 min-h-screen">
+    <div id="app" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <!-- Header Section -->
+      <header class="text-center py-12 border-b border-gray-300 mb-12">
+        <h1
+          class="text-5xl font-extrabold tracking-tight sm:text-6xl text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-800"
+        >
+          {{ portfolio.name }}
+        </h1>
+        <p class="mt-4 text-xl text-gray-600">{{ portfolio.title }}</p>
+        <div class="mt-8 space-x-4 flex justify-center flex-wrap gap-3">
+          <!-- Navigation Buttons -->
+          <button
+            @click="navigateTo('home')"
+            :class="[
+              'inline-block px-6 py-2 border rounded-lg transition duration-300 shadow-lg hover:shadow-xl',
+              currentPage === 'home' ? 'border-blue-500 bg-blue-500 text-white' : 'border-blue-500 text-blue-600 hover:bg-blue-500 hover:text-white'
+            ]"
+          >
+            Home
+          </button>
+          <button
+            @click="navigateTo('projects')"
+            :class="[
+              'inline-block px-6 py-2 border rounded-lg transition duration-300 shadow-lg hover:shadow-xl',
+              currentPage === 'projects' ? 'border-blue-500 bg-blue-500 text-white' : 'border-blue-500 text-blue-600 hover:bg-blue-500 hover:text-white'
+            ]"
+          >
+            Projects ({{ portfolio.projects.length }})
+          </button>
+
+          <!-- External Links -->
+          <a
+            v-for="link in portfolio.links"
+            :key="link.name"
+            :href="link.url"
+            target="_blank"
+            class="inline-block px-6 py-2 border border-blue-500 text-blue-600 rounded-lg hover:bg-blue-500 hover:text-white transition duration-300 shadow-lg hover:shadow-xl"
+          >
+            {{ link.name }}
+          </a>
+        </div>
+      </header>
+
+      <!-- HOME VIEW (Visible when currentPage is 'home') -->
+      <main v-if="currentPage === 'home'" class="page-transition grid grid-cols-1 lg:grid-cols-3 gap-10">
+        <!-- Sidebar (Left Column on Desktop) -->
+        <div class="lg:col-span-1 space-y-10">
+          
+          <!-- About Me Section -->
+          <section class="p-6 bg-white rounded-xl shadow-lg border border-gray-200">
+            <h2 class="text-3xl font-bold mb-4 border-b pb-2 border-gray-300">About Me</h2>
+
+            <div class="flex justify-center mb-6">
+              <!-- Placeholder Image Replacement -->
+              <img 
+                src="me.jfif" 
+               
+                class="w-32 h-32 object-cover rounded-full ring-4 ring-blue-500 shadow-xl"
+              >
+            </div>
+            <p class="text-gray-700 leading-relaxed">{{ portfolio.bio }}</p>
+          </section>
+
+          <!-- Technical Skills Section -->
+          <section
+            class="p-6 bg-white rounded-xl shadow-lg border border-gray-200"
+          >
+            <h2 class="text-3xl font-bold mb-6 border-b pb-2 border-gray-300">
+              Technical Skills
+            </h2>
+            <div
+              v-for="skill in portfolio.skills"
+              :key="skill.name"
+              class="mb-4"
+            >
+              <div class="flex justify-between mb-1">
+                <span class="text-gray-800 font-medium text-lg"
+                  ><b>{{skill.cat}}:</b> {{ skill.name }}</span
+                >
+              </div>
+            </div>
+          </section>
+
+          <!-- Contact Information -->
+          <section
+            class="p-6 bg-white rounded-xl shadow-lg border border-gray-200"
+          >
+            <h2 class="text-3xl font-bold mb-4 border-b pb-2 border-gray-300">
+              Get In Touch
+            </h2>
+            <ul class="space-y-3 text-gray-700">
+              <li
+                v-for="contact in portfolio.contact"
+                :key="contact.type"
+                class="flex items-center space-x-3"
+              >
+                <!-- SVG Icons -->
+                <svg
+                  class="w-5 h-5 text-blue-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <template v-if="contact.type === 'Email'">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8m-10 8h2m-2-8v8"
+                    ></path>
+                  </template>
+                  <template v-else-if="contact.type === 'Phone'">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-11a2 2 0 01-2-2z"
+                    ></path>
+                  </template>
+                  <template v-else-if="contact.type === 'Location'">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"
+                    ></path>
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                    ></path>
+                  </template>
+                </svg>
+                <span>{{ contact.value }}</span>
+              </li>
+            </ul>
+          </section>
+        </div>
+
+        <!-- Main Content (Right Column on Desktop) -->
+        <div class="lg:col-span-2 space-y-12">
+          <!-- Work Experience Section -->
+          <section
+            class="p-6 bg-white rounded-xl shadow-lg border border-gray-200"
+          >
+            <h2 class="text-3xl font-bold mb-6 border-b pb-2 border-gray-300">
+              Work Experience
+            </h2>
+
+            <div
+              v-for="job in portfolio.experience"
+              :key="job.company"
+              class="relative pl-6 pb-8 last:pb-0 before:absolute before:top-0 before:left-0 before:h-full before:w-1 before:bg-blue-600/30"
+            >
+              <!-- Timeline Dot -->
+              <div
+                class="absolute top-0 left-[-4px] w-3 h-3 bg-blue-500 rounded-full ring-8 ring-gray-100"
+              ></div>
+              <div class="flex justify-between items-start flex-wrap gap-2">
+                <div>
+                  <h3 class="text-xl font-semibold text-gray-900">
+                    {{ job.role }}
+                  </h3>
+                  <p class="text-blue-600 font-medium">{{ job.company }}</p>
+                </div>
+                <span
+                  class="text-sm text-gray-700 bg-gray-200 px-3 py-1 rounded-full whitespace-nowrap"
+                  >{{ job.period }}</span
+                >
+              </div>
+              <ul class="mt-3 space-y-2 text-gray-700 list-disc pl-5">
+                <li v-for="(detail, index) in job.details" :key="index">
+                  {{ detail }}
+                </li>
+              </ul>
+            </div>
+          </section>
+
+          <!-- Education Section -->
+          <section
+            class="p-6 bg-white rounded-xl shadow-lg border border-gray-200"
+          >
+            <h2 class="text-3xl font-bold mb-6 border-b pb-2 border-gray-300">
+              Education
+            </h2>
+
+            <div
+              v-for="school in portfolio.education"
+              :key="school.institution"
+              class="relative pl-6 pb-8 last:pb-0 before:absolute before:top-0 before:left-0 before:h-full before:w-1 before:bg-blue-600/30"
+            >
+              <!-- Timeline Dot -->
+              <div
+                class="absolute top-0 left-[-4px] w-3 h-3 bg-blue-500 rounded-full ring-8 ring-gray-100"
+              ></div>
+              <div class="flex justify-between items-start flex-wrap gap-2">
+                <div>
+                  <h3 class="text-xl font-semibold text-gray-900">
+                    {{ school.degree }}
+                  </h3>
+                  <p class="text-blue-600 font-medium">
+                    {{ school.institution }}
+                  </p>
+                </div>
+                <span
+                  class="text-sm text-gray-700 bg-gray-200 px-3 py-1 rounded-full whitespace-nowrap"
+                  >{{ school.period }}</span
+                >
+              </div>
+              <ul
+                v-if="school.details"
+                class="mt-3 space-y-2 text-gray-700 list-disc pl-5"
+              >
+                <li v-for="(detail, index) in school.details" :key="index">
+                  {{ detail }}
+                </li>
+              </ul>
+            </div>
+          </section>
+        </div>
+      </main>
+
+      <!-- PROJECTS VIEW (Visible when currentPage is 'projects') -->
+      <div v-else-if="currentPage === 'projects'" class="page-transition">
+        <section
+          class="p-6 bg-white rounded-xl shadow-lg border border-gray-200"
+        >
+          <h2 class="text-4xl font-extrabold mb-6 text-gray-900">
+            All Featured Projects ({{ portfolio.projects.length }})
+          </h2>
+          <p class="text-gray-600 mb-8 max-w-2xl">
+            A selection of key technical projects demonstrating full-stack
+            capabilities in design, architecture, and performance optimization.
+          </p>
+
+          <!-- Projects Grid -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div
+              v-for="project in portfolio.projects"
+              :key="project.name"
+              class="bg-white p-6 rounded-xl shadow-xl hover:shadow-blue-500/50 transition duration-300 border border-gray-200 flex flex-col justify-between"
+            >
+              <div>
+                <h3 class="text-xl font-semibold text-blue-600 mb-2">
+                  {{ project.name }}
+                </h3>
+                <p class="text-gray-700 text-sm mb-4">{{ project.summary }}</p>
+                <!-- Technology Tags -->
+                <div class="flex flex-wrap gap-2 mb-4">
+                  <span
+                    v-for="tech in project.technologies"
+                    :key="tech"
+                    class="text-xs font-medium px-3 py-1 bg-blue-100 text-blue-700 rounded-full"
+                  >
+                    {{ tech }}
+                  </span>
+                </div>
+              </div>
+              <!-- Project Links -->
+              <div class="flex space-x-3 mt-4">
+                <a
+                  :href="project.github"
+                  target="_blank"
+                  class="text-sm font-medium text-indigo-700 hover:text-indigo-500"
+                >
+                  GitHub &rarr;
+                </a>
+                <a
+                  v-if="project.live"
+                  :href="project.live"
+                  target="_blank"
+                  class="text-sm font-medium text-blue-700 hover:text-blue-500"
+                >
+                  Live Demo &rarr;
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Footer -->
+      <footer
+        class="text-center mt-16 pt-8 border-t border-gray-300 text-gray-500 text-sm"
+      >
+        <p>
+          &copy; {{ new Date().getFullYear() }} {{ portfolio.name }}. Built with
+          Vue 3 and Tailwind CSS.
+        </p>
+      </footer>
+    </div>
+
+    <!-- Vue 3 Application Logic -->
+    <script>
+      const { createApp, ref } = Vue;
+
+      // --- MOCK DATA ---
+      const portfolioData = {
+        name: "Steven Nowicki",
+        title: "Senior Full Stack Software Engineer",
+        bio: "Experienced Software Engineer with a strong background in building scalable web applications using Vue.js and full-stack technologies suchs as Node.js and AWS. Proven ability in: leading complex migrations, feature development, testing, optimizing performance, and solving critical production issues.",
+        links: [
+          { name: "LinkedIn", url: "https://www.linkedin.com/in/snowicki/" },
+        ],
+        contact: [
+          { type: "Email", value: "stevennowicki3@gmail.com" },
+          { type: "Phone", value: "630-512-7845" },
+          { type: "Location", value: "St. Charles, IL" },
+        ],
+        skills: [
+          {
+            cat: "Front-End",
+            name: "Vue.js, JavaScript, TypeScript, HTML, CSS, Vite, React ",
+          },
+          { cat: "Back-End", name: "Node.js, Python, RESTful APIs " },
+          { cat: "Cloud & DevOps", name: "AWS, CI/CD, Docker " },
+          {
+            cat: "Testing",
+            name: "Jest, Vitest, Playwright, Cypress, Selenium",
+          },
+          { cat: "Monitoring", name: "Splunk, New Relic, PagerDuty" },
+          { cat: "Tools", name: "Git, Jira, Agile" },
+          { cat: "Bonus", name: "Experience Technical Writer" },
+        ],
+        education: [
+          {
+            degree: "Master of Computer Science (M.C.S.)",
+            institution: "University of Illinois at Urbana-Champaign",
+            period: "2022 – 2025",
+            details: [
+              "GPA: 3.79/4.00",
+            ],
+          },
+          {
+            degree: "Bachelor of Science in Computer Science",
+            institution: "Oregon State University",
+            period: "2016 – 2019",
+            details: [
+              "GPA: 3.76/4.00",
+            ],
+          },
+          {
+            degree: "Bachelor of Arts in Rhetoric",
+            institution: "University of Illinois",
+            period: "2007 – 2010",
+            details: ["GPA: 3.70/4.00", "Focus: Creative Writing"],
+          },
+        ],
+        experience: [
+          {
+            role: "Senior Software Engineer, Principal Associate",
+            company: "Capital One",
+            period: "2022 – Present",
+            details: [
+              "Principal Associate contributing to Card Fraud Tech Applications"
+            ],
+          },
+          {
+            role: "Frontend Developer",
+            company: "Revolution Entertainment",
+            period: "2022",
+            details: [
+              "Develop features in Typescript/Vue for entertainment industry payroll system.",
+            ],
+          },
+          {
+            role: "Senior Software Engineer",
+            company: "ConData",
+            period: "2020-2022",
+            details: [
+              "Architect Vue frontend for new freight auditing application and integrate with Django Python backend.",
+            ],
+          },
+          {
+            role: "Software Engineer",
+            company: "Infogix",
+            period: "2018-2020",
+            details: ["Develop features using JavaScript and Java for a Big Data Analytics and Visualization SaaS"]
+          },
+          {
+            role: "Content Developer",
+            company: "Infogix",
+            period: "2014-2018",
+            details: ["Create all documentation for new business intelligence and data visualization SaaS product."]
+          },
+          {
+            role: "Freelance Writer",
+            company: "Self Employed",
+            period: "2013-2014",
+            details: ["Started my own freelance writing business online, providing both technical and marketing writing to software companies."]
+          }
+        ],
+        projects: [
+          {
+            name: "Scalable Task Manager API",
+            summary:
+              "Developed a high-throughput microservice architecture for task management, handling 10k+ requests per second.",
+            technologies: [
+              "Node.js",
+              "TypeScript",
+              "Express",
+              "MongoDB",
+              "AWS Lambda",
+            ],
+            github: "https://github.com/snowicki/task-manager-api",
+            live: "",
+          },
+          {
+            name: "Real-time Dashboard",
+            summary:
+              "Created a responsive analytics dashboard using Vue.js and WebSockets for real-time data visualization.",
+            technologies: ["Vue 3", "Pinia", "Tailwind CSS", "WebSockets"],
+            github: "https://github.com/snowicki/realtime-dashboard",
+            live: "https://demo.realtime-dashboard.com",
+          },
+          {
+            name: "E-commerce Checkout Module",
+            summary:
+              "Engineered a secure, performant checkout flow integrated with Stripe, resulting in a 15% reduction in cart abandonment.",
+            technologies: ["Vue 2", "Vuex", "SCSS", "Stripe API"],
+            github: "https://github.com/snowicki/ecommerce-checkout",
+            live: "https://demo.checkout-module.com",
+          },
+          {
+            name: "Movie Classifier",
+            summary: "A machine learning project using a neural network to classify movie genres based on plot summaries, achieving 90%+ accuracy.",
+            technologies: ["Python", "TensorFlow", "Pandas", "scikit-learn"],
+            github: "https://github.com/snowicki/movie-classifier-ml",
+            live: "",
+          },
+        ],
+      };
+
+      // --- VUE 3 APP SETUP ---
+      const App = {
+        setup() {
+          const portfolio = ref(portfolioData);
+          // New state variable to control the current view
+          const currentPage = ref('home'); 
+
+          // Function to change the current view
+          const navigateTo = (page) => {
+            currentPage.value = page;
+          };
+
+          return {
+            portfolio,
+            currentPage,
+            navigateTo,
+          };
+        },
+      };
+
+      createApp(App).mount("#app");
+    </script>
+  </body>
+</html>
