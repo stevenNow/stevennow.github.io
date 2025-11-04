@@ -3,7 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Software Engineer Portfolio | Steven Nowicki</title>
+    <title>Steven Nowicki | Software Engineer</title>
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="site.webmanifest">
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Load Vue 3 from CDN -->
@@ -62,17 +69,6 @@
           >
             Projects ({{ portfolio.projects.length }})
           </button>
-
-          <!-- External Links -->
-          <a
-            v-for="link in portfolio.links"
-            :key="link.name"
-            :href="link.url"
-            target="_blank"
-            class="inline-block px-6 py-2 border border-blue-500 text-blue-600 rounded-lg hover:bg-blue-500 hover:text-white transition duration-300 shadow-lg hover:shadow-xl"
-          >
-            {{ link.name }}
-          </a>
         </div>
       </header>
 
